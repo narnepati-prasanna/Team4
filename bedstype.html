@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Bed Type List</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #000;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            height: 100vh;
+            background: #2f3d6a;
+            color: #fff;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .sidebar h4 {
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .sidebar .nav-link {
+            color: #cfd8dc;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .sidebar .nav-link:hover {
+            color: #fff;
+        }
+
+        .sidebar .small {
+            color: #9da8b0;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .sidebar .version {
+            font-size: 13px;
+            margin-top: 20px;
+        }
+
+        /* Header Topbar */
+        .topbar {
+            background: #fff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .topbar-icons i {
+            font-size: 20px;
+            margin-right: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .topbar-icons .dot {
+            position: absolute;
+            top: -2px;
+            right: -6px;
+            height: 8px;
+            width: 8px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        /* Table */
+        .table th {
+            background: #2f3d6a;
+            color: #fff;
+        }
+
+        .status-badge {
+            background: #28a745;
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .status-badge.inactive {
+            background: #dc3545;
+        }
+
+        /* Footer */
+        footer {
+            font-size: 13px;
+            color: gray;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px 0;
+            border-top: 1px solid #ddd;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background: #1e1e1e;
+            color: #fff;
+        }
+
+        body.dark-mode .card,
+        body.dark-mode .modal-content,
+        body.dark-mode .topbar {
+            background: #2c2c2c;
+            color: #fff;
+        }
+
+        body.dark-mode .table th {
+            background: #444;
+        }
+
+        body.dark-mode .sidebar {
+            background: #1b253f;
+        }
+
+        body.dark-mode footer {
+            color: #aaa;
+            border-color: #444;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #333 !important;
+            color: #fff !important;
+            border: 1px solid #555 !important;
+        }
+
+        /* Custom modal style */
+        .modal-content {
+            border-radius: 8px;
+        }
+
+        .modal-header {
+            background: #2f3d6a;
+            color: #fff;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+
+        .modal-footer {
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar">
+                <h4>RVM</h4>
+                <nav class="nav flex-column">
+                    <span class="small">Vendor</span>
+                    <a class="nav-link" href="#"><i class="bi bi-megaphone me-2"></i>Campaigns</a>
+                    <span class="small mt-3">MRD</span>
+                    <a class="nav-link" href="#"><i class="bi bi-journal-text me-2"></i>MRD</a>
+                    <span class="small mt-3">Finance & Accounts</span>
+                    <a class="nav-link" href="#"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                    <a class="nav-link" href="#"><i class="bi bi-receipt me-2"></i>Invoices</a>
+                    <span class="small mt-3">Help Desk</span>
+                    <a class="nav-link" href="#"><i class="bi bi-calendar-check me-2"></i>Appointments</a>
+                    <a class="nav-link" href="#"><i class="bi bi-arrow-repeat me-2"></i>Follow Up's</a>
+                    <a class="nav-link" href="#"><i class="bi bi-headset me-2"></i>Service Desk</a>
+                    <span class="small mt-3">Settings</span>
+                    <a class="nav-link" href="#"><i class="bi bi-gear me-2"></i>General Settings</a>
+                    <div class="version">V.1.10-PULSE</div>
+                </nav>
+            </div>
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center topbar">
+                    <div class="d-flex align-items-center w-50">
+                        <i class="bi bi-list me-3" style="font-size:20px;cursor:pointer;"></i>
+                        <input type="text" class="form-control w-75" placeholder="Search by bed type">
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="topbar-icons d-flex align-items-center me-3">
+                            <div><i class="bi bi-hospital-bed" id="hospitalIcon"></i><span class="dot"></span></div>
+                            <div><i class="bi bi-arrows-fullscreen" id="fullscreenIcon"></i></div>
+                            <div><i class="bi bi-moon" id="darkToggle"></i></div>
+                            <div><i class="bi bi-bell" id="notifIcon"></i><span class="dot"></span></div>
+                        </div>
+                        <div style="display:flex;align-items:center; gap:10px;">
+                            <img src="rvm.png.png" style="border-radius:50%;" height="50" width="50" alt="avatar">
+                            <div style="font-size:13px;text-align:right;">
+                                <div style="font-weight:600;">R.V.M Hospitals</div>
+                                <div style="font-size:11px;color:var(--muted);">RVM15032501</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card -->
+                <div class="card shadow-sm mt-3">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">BED TYPE LIST</span>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Bed Type List</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="card-body">
+                        <!-- Buttons -->
+                        <div class="mb-3">
+                            <button class="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#createModal">
+                                <i class="bi bi-person-plus me-1"></i>Create Bed Type
+                            </button>
+                            <label class="btn btn-success me-1 mb-0">
+                                <i class="bi bi-upload me-1"></i>Import
+                                <input type="file" id="importFile" accept=".csv" hidden>
+                            </label>
+                            <button class="btn btn-info text-white" id="exportBtn"><i
+                                    class="bi bi-download me-1"></i>Export</button>
+                        </div>
+                        <!-- Table -->
+                        <table class="table table-bordered align-middle">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Bed Type</th>
+                                    <th>Created Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bedTable">
+                                <tr>
+                                    <td>1</td>
+                                    <td>ICU (Intensive Care Unit) Beds</td>
+                                    <td>24 Apr, 2025</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary edit-btn"><i
+                                                class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-danger delete-btn"><i
+                                                class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>ICU Bed</td>
+                                    <td>24 Apr, 2025</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary edit-btn"><i
+                                                class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-danger delete-btn"><i
+                                                class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>GENERAL BED</td>
+                                    <td>10 Apr, 2025</td>
+                                    <td><span class="status-badge">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary edit-btn"><i
+                                                class="bi bi-pencil"></i></button>
+                                        <button class="btn btn-sm btn-danger delete-btn"><i
+                                                class="bi bi-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- Pagination -->
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <footer>
+                    R.V.M Hospitals © Peramsons Software. All Rights Reserved. <br>
+                    Design & Develop by Peramsons Software
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create New Bed Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createForm">
+                        <div class="mb-3">
+                            <label for="bedTypeName" class="form-label">Bed Type <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="bedTypeName" placeholder="Enter Bed Type"
+                                required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="shortDesc" class="form-label">Short Description</label>
+                            <textarea class="form-control" id="shortDesc"
+                                placeholder="Enter Short Description"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle Active/Inactive
+        function toggleStatus(badge) {
+            badge.classList.toggle("inactive");
+            badge.textContent = badge.classList.contains("inactive") ? "Inactive" : "Active";
+        }
+        document.querySelectorAll(".status-badge").forEach(badge => {
+            badge.addEventListener("click", () => toggleStatus(badge));
+        });
+
+        // Delete row
+        function bindDelete(btn) {
+            btn.addEventListener("click", () => {
+                if (confirm("Are you sure you want to delete this bed type?")) {
+                    btn.closest("tr").remove();
+                }
+            });
+        }
+        document.querySelectorAll(".delete-btn").forEach(bindDelete);
+
+        // Edit row
+        function bindEdit(btn) {
+            btn.addEventListener("click", () => {
+                const row = btn.closest("tr");
+                const bedType = row.children[1].textContent;
+                const newName = prompt("Edit Bed Type:", bedType);
+                if (newName) row.children[1].textContent = newName;
+            });
+        }
+        document.querySelectorAll(".edit-btn").forEach(bindEdit);
+
+        // Create new bed type
+        document.getElementById("createForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            const bedTypeName = document.getElementById("bedTypeName").value.trim();
+            if (bedTypeName) {
+                const table = document.getElementById("bedTable");
+                const newRow = table.insertRow();
+                const index = table.rows.length;
+                newRow.innerHTML = `
+        <td>${index}</td>
+        <td>${bedTypeName}</td>
+        <td>${new Date().toLocaleDateString()}</td>
+        <td><span class="status-badge">Active</span></td>
+        <td>
+          <button class="btn btn-sm btn-primary edit-btn"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-danger delete-btn"><i class="bi bi-trash"></i></button>
+        </td>
+      `;
+                newRow.querySelector(".status-badge").addEventListener("click", function () {
+                    toggleStatus(this);
+                });
+                bindDelete(newRow.querySelector(".delete-btn"));
+                bindEdit(newRow.querySelector(".edit-btn"));
+                document.getElementById("createForm").reset();
+                bootstrap.Modal.getInstance(document.getElementById("createModal")).hide();
+            }
+        });
+
+        // Dark mode toggle
+        document.getElementById("darkToggle").addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+        });
+
+        // Fullscreen toggle
+        document.getElementById("fullscreenIcon").addEventListener("click", () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // Notification icon
+        document.getElementById("notifIcon").addEventListener("click", () => {
+            alert("You have new notifications!");
+        });
+
+        // Hospital icon
+        document.getElementById("hospitalIcon").addEventListener("click", () => {
+            alert("Hospital bed management system active!");
+        });
+
+        // Export to CSV
+        document.getElementById("exportBtn").addEventListener("click", () => {
+            let rows = document.querySelectorAll("#bedTable tr");
+            let csv = "S.No,Bed Type,Created Date,Status\n";
+            rows.forEach(r => {
+                let cols = r.querySelectorAll("td");
+                if (cols.length > 0) {
+                    csv += `${cols[0].innerText},${cols[1].innerText},${cols[2].innerText},${cols[3].innerText}\n`;
+                }
+            });
+            let blob = new Blob([csv], { type: "text/csv" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "bed_types.csv";
+            link.click();
+        });
+
+        // Import CSV
+        document.getElementById("importFile").addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const lines = e.target.result.split("\n").slice(1);
+                const table = document.getElementById("bedTable");
+                lines.forEach(line => {
+                    const cleaned = line.trim();
+                    if (cleaned !== "") {
+                        const [sno, bedType, createdDate, status] = cleaned.split(",");
+                        const newRow = table.insertRow();
+                        newRow.innerHTML = `
+            <td>${table.rows.length}</td>
+            <td>${bedType?.trim() || ""}</td>
+            <td>${createdDate?.trim() || new Date().toLocaleDateString()}</td>
+            <td><span class="status-badge ${status?.trim() === "Inactive" ? "inactive" : ""}">${status?.trim() || "Active"}</span></td>
+            <td>
+              <button class="btn btn-sm btn-primary edit-btn"><i class="bi bi-pencil"></i></button>
+              <button class="btn btn-sm btn-danger delete-btn"><i class="bi bi-trash"></i></button>
+            </td>
+          `;
+                        newRow.querySelector(".status-badge").addEventListener("click", function () { toggleStatus(this); });
+                        bindDelete(newRow.querySelector(".delete-btn"));
+                        bindEdit(newRow.querySelector(".edit-btn"));
+                    }
+                });
+            };
+            reader.readAsText(file);
+        });
+    </script>
+</body>
+
+</html>

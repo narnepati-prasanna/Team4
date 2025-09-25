@@ -1,0 +1,1980 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Wards Management - Mock</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f1f3f6;
+            font-family: Inter, Arial;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 250px;
+            background: #203562;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+        }
+
+        .sidebar .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 30px 0 20px 0;
+        }
+
+        .sidebar .sidebar-menu {
+            flex: 1;
+            overflow-y: auto;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .sidebar .sidebar-menu li {
+            list-style: none;
+        }
+
+        .sidebar .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #e9ecf5;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar .sidebar-menu li a.active,
+        .sidebar .sidebar-menu li a:hover {
+            background: #152447;
+            color: #fff;
+            border-left: 3px solid #3399ff;
+        }
+
+        .sidebar .sidebar-menu i {
+            font-size: 1.3em;
+            margin-right: 12px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            right: 0;
+            height: 64px;
+            background: #fff;
+            border-bottom: 1px solid #e0e7ef;
+            display: flex;
+            align-items: center;
+            z-index: 1040;
+            padding: 0 24px;
+        }
+
+        .header .search-bar {
+            width: 280px;
+            margin-right: 16px;
+        }
+
+        .header .header-items {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .header .header-items .icon {
+            margin-right: 20px;
+            font-size: 1.2em;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .header .header-items .icon .badge {
+            position: absolute;
+            top: -7px;
+            right: -8px;
+            background: #3399ff;
+            color: #fff;
+            font-size: 0.75em;
+            border-radius: 8px;
+            padding: 2px 6px;
+        }
+
+        .header .header-items .profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .header-items .profile-info {
+            margin-right: 10px;
+            font-size: 0.96em;
+            text-align: right;
+        }
+
+        .header .header-items .profile img {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #dfdfdf;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: fixed;
+            left: 250px;
+            top: 64px;
+            bottom: 0;
+            right: 0;
+            overflow-y: auto;
+            padding: 26px 32px 32px 32px;
+        }
+
+        .tabs-card {
+            background: #fff;
+            padding: 18px;
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-tabs .nav-link.active {
+            background: #0f5db2;
+            color: #fff;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        .status-active {
+            background: #d4f8e8;
+            color: #23a05f;
+        }
+
+        .status-inactive {
+            background: #ffdede;
+            color: #e74c3c;
+        }
+
+        .action-btns .btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+        }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #dde2ec;
+            border-radius: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            position: fixed;
+            left: 250px;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            border-top: 1px solid #e0e7ef;
+            padding: 12px 20px;
+            font-size: 0.9em;
+            text-align: center;
+            z-index: 1030;
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 56px;
+            }
+
+            .sidebar .logo,
+            .sidebar .sidebar-menu span {
+                display: none;
+            }
+
+            .header {
+                left: 56px;
+            }
+
+            .main-content {
+                left: 56px;
+            }
+
+            .footer {
+                left: 56px;
+            }
+        }
+
+        /* Dark mode */
+        .dark-mode {
+            background: #121212;
+            color: #eee;
+        }
+
+        .dark-mode .tabs-card,
+        .dark-mode .header,
+        .dark-mode .footer {
+            background: #1e1e1e;
+            color: #eee;
+        }
+
+        .dark-mode .table {
+            color: #eee;
+        }
+
+        .dark-mode .nav-tabs .nav-link.active {
+            background: #0f5db2;
+            color: #fff;
+        }
+
+        /* Fullscreen mode */
+        body.fullscreen-mode .sidebar,
+        body.fullscreen-mode .header,
+        body.fullscreen-mode .footer {
+            display: none;
+        }
+
+        body.fullscreen-mode .main-content {
+            left: 0;
+            top: 0;
+            padding: 15px;
+            z-index: 1060;
+        }
+
+        body.fullscreen-mode .tabs-card {
+            height: 100%;
+            overflow: auto;
+        }
+
+        /* Pagination styles */
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .page-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #0f5db2;
+            border-color: #0f5db2;
+        }
+
+        .table-container {
+            position: relative;
+            min-height: 300px;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .dark-mode .loading-overlay {
+            background: rgba(30, 30, 30, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">RVM</div>
+        <ul class="sidebar-menu">
+            <li><a href="#"><i class="bi bi-speedometer2"></i> <span>Dashboard</span></a></li>
+            <li><a href="#"><i class="bi bi-gear"></i> <span>General Settings</span></a></li>
+            <li><a href="#"><i class="bi bi-activity"></i> <span>V.1.10-PULSE</span></a></li>
+        </ul>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <input id="searchInput" class="form-control search-bar" placeholder="Search.." />
+        <div class="header-items">
+            <div class="icon" id="fullscreenToggle" title="Toggle Fullscreen">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </div>
+            <div class="icon" id="darkModeToggle"><i class="bi bi-moon"></i></div>
+            <div class="icon" id="bellIcon"><i class="bi bi-bell"></i></div>
+            <div class="profile">
+                <div class="profile-info">
+                    <div>R.V.M Hospitals</div>
+                    <small>RVM15032601</small>
+                </div>
+                <img src="rvm.png.png" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main-content">
+        <h3>Wards Management</h3>
+        <div class="tabs-card mt-3">
+            <ul class="nav nav-tabs mb-3" id="tabs">
+                <li class="nav-item"><button class="nav-link active" data-tab="blocks">Blocks</button></li>
+                <li class="nav-item"><button class="nav-link" data-tab="floors">Floors</button></li>
+                <li class="nav-item"><button class="nav-link" data-tab="wards">Wards</button></li>
+                <li class="nav-item"><button class="nav-link" data-tab="beds">Beds</button></li>
+            </ul>
+
+            <div class="d-flex align-items-center controls mb-3">
+                <div class="d-flex gap-2">
+                    <button id="createBtn" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#createBlockModal">
+                        <i class="bi bi-plus-square me-1"></i> Create Block
+                    </button>
+                    <button id="importBtn" class="btn btn-success"><i class="bi bi-upload me-1"></i> Import</button>
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" class="d-none">
+                    <button id="exportBtn" class="btn btn-info text-white"><i class="bi bi-download me-1"></i>
+                        Export</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="loading-overlay d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="blocks" class="table table-bordered align-middle data-table">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Block Name</th>
+                                <th>Block Id</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <table id="floors" class="table table-bordered align-middle data-table d-none">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Floor Name</th>
+                                <th>Floor Id</th>
+                                <th>Block Name</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <table id="wards" class="table table-bordered align-middle data-table d-none">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Ward Name</th>
+                                <th>Ward Id</th>
+                                <th>Block</th>
+                                <th>Floor</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+
+                    <table id="beds" class="table table-bordered align-middle data-table d-none">
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Bed Name</th>
+                                <th>Bed Series</th>
+                                <th>Ward</th>
+                                <th>Room No</th>
+                                <th>Type</th>
+                                <th>No. of Beds</th>
+                                <th>Created Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-container">
+                    <div class="page-info" id="pageInfo">Showing 0 to 0 of 0 entries</div>
+                    <nav>
+                        <ul class="pagination mb-0" id="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">&copy; 2025 R.V.M Hospitals | All Rights Reserved</div>
+
+    <!-- Modals -->
+    <!-- Create Block Modal -->
+    <div class="modal fade" id="createBlockModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="BlockForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Create New Block</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="blockName"
+                                    placeholder="Ex: Enter Block Name" required>
+                            </div>
+
+                            <!-- Block ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block ID <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="blockId" placeholder="Ex: Enter block ID"
+                                    required>
+                            </div>
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" name="blockDescription" rows="3"
+                                    placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Block Modal -->
+    <div class="modal fade" id="editBlockModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="editBlockForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Edit Block</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editBlockName" name="blockName"
+                                    placeholder="Ex: Enter Block Name" required>
+                            </div>
+
+                            <!-- Block ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block ID <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editBlockId" name="blockId"
+                                    placeholder="Ex: Enter block ID" required>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="editBlockStatus" name="blockStatus" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" id="editBlockDescription" name="blockDescription"
+                                    rows="3" placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="editBlockIdValue">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Floor Modal -->
+    <div class="modal fade" id="createFloorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="FloorForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Create New Floor</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+                            <!-- Floor Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="floorName"
+                                    placeholder="Ex: Enter Floor Name" required>
+                            </div>
+
+                            <!-- Floor ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor ID <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="floorId" placeholder="Ex: Enter Floor ID"
+                                    required>
+                            </div>
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" name="floorDescription" rows="3"
+                                    placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Floor Modal -->
+    <div class="modal fade" id="editFloorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="editFloorForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Edit Floor</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editFloorBlockName" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+                            <!-- Floor Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editFloorName" name="floorName"
+                                    placeholder="Ex: Enter Floor Name" required>
+                            </div>
+
+                            <!-- Floor ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor ID <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editFloorId" name="floorId"
+                                    placeholder="Ex: Enter Floor ID" required>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="editFloorStatus" name="floorStatus" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" id="editFloorDescription" name="floorDescription"
+                                    rows="3" placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="hidden" id="editFloorIdValue">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Ward Modal -->
+    <div class="modal fade" id="createWardModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="wardForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Create New Ward</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+
+                            <!-- Floor Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="floorName" required>
+                                    <option value="" selected disabled>Select Floor Name</option>
+                                    <option>Floor 1</option>
+                                    <option>Floor 2</option>
+                                    <option>Floor 3</option>
+                                    <option>Floor 4</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="wardName" placeholder="Ex: General Ward"
+                                    required>
+                            </div>
+
+                            <!-- Ward ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward ID <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="wardId" placeholder="Ex: W101" required>
+                            </div>
+                            <!--Ward Type -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="wardType" required>
+                                    <option value="" selected disabled>Select Ward Type</option>
+                                    <option>Universal</option>
+                                    <option>General</option>
+                                    <option>Specialized</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Cost -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Cost (₹)<span
+                                        class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" name="wardCost"
+                                    placeholder="Ex: 1000.00" required>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" name="wardDescription" rows="3"
+                                    placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Ward Modal -->
+    <div class="modal fade" id="editWardModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="editWardForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Edit Ward</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editWardBlockName" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+
+                            <!-- Floor Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editWardFloorName" name="floorName" required>
+                                    <option value="" selected disabled>Select Floor Name</option>
+                                    <option>Floor 1</option>
+                                    <option>Floor 2</option>
+                                    <option>Floor 3</option>
+                                    <option>Floor 4</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Name -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Name <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editWardName" name="wardName"
+                                    placeholder="Ex: General Ward" required>
+                            </div>
+
+                            <!-- Ward ID -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward ID <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="editWardId" name="wardId"
+                                    placeholder="Ex: W101" required>
+                            </div>
+
+                            <!--Ward Type -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editWardType" name="wardType" required>
+                                    <option value="" selected disabled>Select Ward Type</option>
+                                    <option>Universal</option>
+                                    <option>General</option>
+                                    <option>Specialized</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Cost -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Ward Cost (₹)<span
+                                        class="text-danger">*</span></label>
+                                <input type="number" step="0.01" class="form-control" id="editWardCost" name="wardCost"
+                                    placeholder="Ex: 1000.00" required>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="editWardStatus" name="wardStatus" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <!-- Short Description -->
+                            <div class="mt-3">
+                                <label class="form-label fw-semibold">Short Description (optional)</label>
+                                <textarea class="form-control" id="editWardDescription" name="wardDescription" rows="3"
+                                    placeholder="Ex: Details about safety measures"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="hidden" id="editWardIdValue">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Bed Modal -->
+    <div class="modal fade" id="createBedModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="bedForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Create New Bed</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+
+                            <!-- Floor Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="floorName" required>
+                                    <option value="" selected disabled>Select Floor Name</option>
+                                    <option>Floor 1</option>
+                                    <option>Floor 2</option>
+                                    <option>Floor 3</option>
+                                    <option>Floor 4</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Ward Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="wardName" required>
+                                    <option value="" selected disabled>Select Ward Name</option>
+                                    <option>General Ward</option>
+                                    <option>Private Ward</option>
+                                    <option>Emergency Ward</option>
+                                </select>
+                            </div>
+
+                            <!-- Room Type dropdown + radios -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Room Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select mb-2" name="roomTypeSelect" required>
+                                    <option value="" selected disabled>Select Room Type</option>
+                                    <option value="General">General</option>
+                                    <option value="ICU">ICU</option>
+                                    <option value="Emergency">Emergency</option>
+                                </select>
+
+                                <!-- vertical radio list -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio"
+                                        id="roomTypeGeneral" value="General" checked>
+                                    <label class="form-check-label ms-2" for="roomTypeGeneral">General</label>
+                                </div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio" id="roomTypeIcu"
+                                        value="ICU">
+                                    <label class="form-check-label ms-2" for="roomTypeIcu">ICU</label>
+                                </div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio"
+                                        id="roomTypeEmergency" value="Emergency">
+                                    <label class="form-check-label ms-2" for="roomTypeEmergency">Emergency</label>
+                                </div>
+                            </div>
+
+                            <!-- Room Number -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Room Number <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" name="roomNo" required>
+                                    <option value="" selected disabled>Select Room Number</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Bed grouped box -->
+                        <div class="border rounded p-3 mt-3">
+                            <div id="bedRows" class="container-fluid">
+                                <div class="row g-3 align-items-center bed-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Type <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" name="bedType[]" required>
+                                            <option value="" selected disabled>Select Bed Type</option>
+                                            <option>Standard</option>
+                                            <option>Electric</option>
+                                            <option>Fowler</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="bedName[]"
+                                            placeholder="Ex: Standard Hospital Bed" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Series <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="bedSeries[]" placeholder="Ex: A1"
+                                            required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">No of Beds <span
+                                                class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" name="noBeds[]" placeholder="Ex: 2"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- green plus button -->
+                            <div class="mt-3">
+                                <button id="addBedRow" type="button" class="btn btn-success rounded-circle p-2"
+                                    title="Add another bed">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Short Description -->
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold">Short Description (optional)</label>
+                            <textarea class="form-control" name="bedDescription" rows="3"
+                                placeholder="Ex: Details about safety measures"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Bed Modal -->
+    <div class="modal fade" id="editBedModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <form id="editBedForm" class="modal-content">
+                <div class="modal-header" style="background:#37477a;color:#fff">
+                    <h5 class="modal-title">Edit Bed</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row g-3">
+                            <!-- Block Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Block Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editBedBlockName" name="blockName" required>
+                                    <option value="" selected disabled>Select Block Name</option>
+                                    <option>Block 1</option>
+                                    <option>Block 2</option>
+                                    <option>Block 3</option>
+                                </select>
+                            </div>
+
+                            <!-- Floor Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Floor Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editBedFloorName" name="floorName" required>
+                                    <option value="" selected disabled>Select Floor Name</option>
+                                    <option>Floor 1</option>
+                                    <option>Floor 2</option>
+                                    <option>Floor 3</option>
+                                    <option>Floor 4</option>
+                                </select>
+                            </div>
+
+                            <!-- Ward Name -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Ward Name <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editBedWardName" name="wardName" required>
+                                    <option value="" selected disabled>Select Ward Name</option>
+                                    <option>General Ward</option>
+                                    <option>Private Ward</option>
+                                    <option>Emergency Ward</option>
+                                </select>
+                            </div>
+
+                            <!-- Room Type dropdown + radios -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Room Type <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select mb-2" id="editBedRoomTypeSelect" name="roomTypeSelect"
+                                    required>
+                                    <option value="" selected disabled>Select Room Type</option>
+                                    <option value="General">General</option>
+                                    <option value="ICU">ICU</option>
+                                    <option value="Emergency">Emergency</option>
+                                </select>
+
+                                <!-- vertical radio list -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio"
+                                        id="editBedRoomTypeGeneral" value="General" checked>
+                                    <label class="form-check-label ms-2" for="editBedRoomTypeGeneral">General</label>
+                                </div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio"
+                                        id="editBedRoomTypeIcu" value="ICU">
+                                    <label class="form-check-label ms-2" for="editBedRoomTypeIcu">ICU</label>
+                                </div>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="radio" name="roomTypeRadio"
+                                        id="editBedRoomTypeEmergency" value="Emergency">
+                                    <label class="form-check-label ms-2"
+                                        for="editBedRoomTypeEmergency">Emergency</label>
+                                </div>
+                            </div>
+
+                            <!-- Room Number -->
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Room Number <span
+                                        class="text-danger">*</span></label>
+                                <select class="form-select" id="editBedRoomNo" name="roomNo" required>
+                                    <option value="" selected disabled>Select Room Number</option>
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Bed grouped box -->
+                        <div class="border rounded p-3 mt-3">
+                            <div id="editBedRows" class="container-fluid">
+                                <div class="row g-3 align-items-center bed-row">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Type <span
+                                                class="text-danger">*</span></label>
+                                        <select class="form-select" id="editBedType" name="bedType[]" required>
+                                            <option value="" selected disabled>Select Bed Type</option>
+                                            <option>Standard</option>
+                                            <option>Electric</option>
+                                            <option>Fowler</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="editBedName" name="bedName[]"
+                                            placeholder="Ex: Standard Hospital Bed" required>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Bed Series <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="editBedSeries" name="bedSeries[]"
+                                            placeholder="Ex: A1" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">No of Beds <span
+                                                class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="editBedNoBeds" name="noBeds[]"
+                                            placeholder="Ex: 2" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" id="editBedStatus" name="bedStatus" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+
+                        <!-- Short Description -->
+                        <div class="mt-3">
+                            <label class="form-label fw-semibold">Short Description (optional)</label>
+                            <textarea class="form-control" id="editBedDescription" name="bedDescription" rows="3"
+                                placeholder="Ex: Details about safety measures"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <input type="hidden" id="editBedIdValue">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sample data for demonstration
+        let blockData = [
+            { id: 1, name: "Main Block", blockId: "BLK001", createdDate: "2025-01-15", status: "Active", description: "" },
+            { id: 2, name: "East Wing", blockId: "BLK002", createdDate: "2025-02-20", status: "Active", description: "" },
+            { id: 3, name: "West Wing", blockId: "BLK003", createdDate: "2025-03-10", status: "Inactive", description: "" },
+            { id: 4, name: "North Wing", blockId: "BLK004", createdDate: "2025-04-05", status: "Active", description: "" },
+            { id: 5, name: "South Wing", blockId: "BLK005", createdDate: "2025-05-12", status: "Active", description: "" },
+            { id: 6, name: "Central Block", blockId: "BLK006", createdDate: "2025-06-18", status: "Inactive", description: "" },
+            { id: 7, name: "Emergency Block", blockId: "BLK007", createdDate: "2025-07-22", status: "Active", description: "" },
+            { id: 8, name: "Surgical Block", blockId: "BLK008", createdDate: "2025-08-30", status: "Active", description: "" },
+            { id: 9, name: "Maternity Block", blockId: "BLK009", createdDate: "2025-09-05", status: "Active", description: "" },
+            { id: 10, name: "Pediatric Block", blockId: "BLK010", createdDate: "2025-10-15", status: "Inactive", description: "" }
+        ];
+
+        let floorData = [
+            { id: 1, name: "Ground Floor", floorId: "FL001", blockName: "Main Block", createdDate: "2025-01-20", status: "Active", description: "" },
+            { id: 2, name: "First Floor", floorId: "FL002", blockName: "Main Block", createdDate: "2025-01-22", status: "Active", description: "" },
+            { id: 3, name: "Second Floor", floorId: "FL003", blockName: "East Wing", createdDate: "2025-02-25", status: "Inactive", description: "" },
+            { id: 4, name: "Third Floor", floorId: "FL004", blockName: "East Wing", createdDate: "2025-03-10", status: "Active", description: "" },
+            { id: 5, name: "Fourth Floor", floorId: "FL005", blockName: "West Wing", createdDate: "2025-04-15", status: "Active", description: "" },
+            { id: 6, name: "Fifth Floor", floorId: "FL006", blockName: "West Wing", createdDate: "2025-05-20", status: "Inactive", description: "" },
+            { id: 7, name: "Basement", floorId: "FL007", blockName: "North Wing", createdDate: "2025-06-25", status: "Active", description: "" },
+            { id: 8, name: "Mezzanine", floorId: "FL008", blockName: "South Wing", createdDate: "2025-07-30", status: "Active", description: "" },
+            { id: 9, name: "Penthouse", floorId: "FL009", blockName: "Central Block", createdDate: "2025-08-05", status: "Active", description: "" },
+            { id: 10, name: "Roof", floorId: "FL010", blockName: "Emergency Block", createdDate: "2025-09-10", status: "Inactive", description: "" }
+        ];
+
+        let wardData = [
+            { id: 1, name: "General Ward", wardId: "WD001", block: "Main Block", floor: "First Floor", type: "General", cost: 1000, createdDate: "2025-02-01", status: "Active", description: "" },
+            { id: 2, name: "ICU", wardId: "WD002", block: "Main Block", floor: "Second Floor", type: "Specialized", cost: 2500, createdDate: "2025-02-10", status: "Active", description: "" },
+            { id: 3, name: "Emergency", wardId: "WD003", block: "East Wing", floor: "Ground Floor", type: "Emergency", cost: 1500, createdDate: "2025-03-05", status: "Inactive", description: "" },
+            { id: 4, name: "Maternity", wardId: "WD004", block: "West Wing", floor: "Third Floor", type: "Specialized", cost: 2000, createdDate: "2025-04-12", status: "Active", description: "" },
+            { id: 5, name: "Pediatric", wardId: "WD005", block: "North Wing", floor: "Fourth Floor", type: "Specialized", cost: 1800, createdDate: "2025-05-18", status: "Active", description: "" },
+            { id: 6, name: "Surgical", wardId: "WD006", block: "South Wing", floor: "Fifth Floor", type: "Specialized", cost: 2200, createdDate: "2025-06-22", status: "Inactive", description: "" },
+            { id: 7, name: "Oncology", wardId: "WD007", block: "Central Block", floor: "Mezzanine", type: "Specialized", cost: 2300, createdDate: "2025-07-30", status: "Active", description: "" },
+            { id: 8, name: "Cardiology", wardId: "WD008", block: "Emergency Block", floor: "Basement", type: "Specialized", cost: 2400, createdDate: "2025-08-05", status: "Active", description: "" },
+            { id: 9, name: "Orthopedics", wardId: "WD009", block: "Surgical Block", floor: "Penthouse", type: "Specialized", cost: 2100, createdDate: "2025-09-10", status: "Active", description: "" },
+            { id: 10, name: "Psychiatric", wardId: "WD010", block: "Maternity Block", floor: "Roof", type: "Specialized", cost: 1900, createdDate: "2025-10-15", status: "Inactive", description: "" }
+        ];
+
+        let bedData = [
+            { id: 1, name: "Standard Bed", bedSeries: "BS001", ward: "General Ward", roomNo: "101", type: "General", noOfBeds: 1, createdDate: "2025-02-05", status: "Active", description: "" },
+            { id: 2, name: "ICU Bed", bedSeries: "BS002", ward: "ICU", roomNo: "201", type: "ICU", noOfBeds: 1, createdDate: "2025-02-12", status: "Active", description: "" },
+            { id: 3, name: "Emergency Bed", bedSeries: "BS003", ward: "Emergency", roomNo: "301", type: "Emergency", noOfBeds: 2, createdDate: "2025-03-08", status: "Inactive", description: "" },
+            { id: 4, name: "Maternity Bed", bedSeries: "BS004", ward: "Maternity", roomNo: "401", type: "Maternity", noOfBeds: 1, createdDate: "2025-04-15", status: "Active", description: "" },
+            { id: 5, name: "Pediatric Bed", bedSeries: "BS005", ward: "Pediatric", roomNo: "501", type: "Pediatric", noOfBeds: 1, createdDate: "2025-05-20", status: "Active", description: "" },
+            { id: 6, name: "Surgical Bed", bedSeries: "BS006", ward: "Surgical", roomNo: "601", type: "Surgical", noOfBeds: 2, createdDate: "2025-06-25", status: "Inactive", description: "" },
+            { id: 7, name: "Oncology Bed", bedSeries: "BS007", ward: "Oncology", roomNo: "701", type: "Oncology", noOfBeds: 1, createdDate: "2025-07-30", status: "Active", description: "" },
+            { id: 8, name: "Cardiology Bed", bedSeries: "BS008", ward: "Cardiology", roomNo: "801", type: "Cardiology", noOfBeds: 1, createdDate: "2025-08-05", status: "Active", description: "" },
+            { id: 9, name: "Orthopedic Bed", bedSeries: "BS009", ward: "Orthopedics", roomNo: "901", type: "Orthopedic", noOfBeds: 2, createdDate: "2025-09-10", status: "Active", description: "" },
+            { id: 10, name: "Psychiatric Bed", bedSeries: "BS010", ward: "Psychiatric", roomNo: "1001", type: "Psychiatric", noOfBeds: 1, createdDate: "2025-10-15", status: "Inactive", description: "" }
+        ];
+
+        // DOM elements
+        const tabs = document.querySelectorAll('#tabs .nav-link');
+        const tables = document.querySelectorAll('.data-table');
+        const createBtn = document.getElementById('createBtn');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const fullscreenToggle = document.getElementById('fullscreenToggle');
+        const searchInput = document.getElementById('searchInput');
+        const addBedRowBtn = document.getElementById('addBedRow');
+        const bedRowsContainer = document.getElementById('bedRows');
+        const paginationContainer = document.getElementById('pagination');
+        const pageInfo = document.getElementById('pageInfo');
+        const loadingOverlay = document.querySelector('.loading-overlay');
+
+        // Pagination settings
+        const rowsPerPage = 5;
+        let currentPage = 1;
+        let currentTable = 'blocks';
+        let filteredData = {
+            blocks: [...blockData],
+            floors: [...floorData],
+            wards: [...wardData],
+            beds: [...bedData]
+        };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function () {
+            renderTables();
+            setupEventListeners();
+            setupPagination('blocks', filteredData.blocks);
+        });
+
+        // Render all tables with data
+        function renderTables() {
+            renderBlockTable(getPaginatedData('blocks'));
+            renderFloorTable(getPaginatedData('floors'));
+            renderWardTable(getPaginatedData('wards'));
+            renderBedTable(getPaginatedData('beds'));
+        }
+
+        // Get paginated data for a table
+        function getPaginatedData(tableType) {
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            return filteredData[tableType].slice(startIndex, endIndex);
+        }
+
+        // Render block table
+        function renderBlockTable(data) {
+            const tbody = document.querySelector('#blocks tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((block, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${(currentPage - 1) * rowsPerPage + index + 1}</td>
+          <td>${block.name}</td>
+          <td>${block.blockId}</td>
+          <td>${block.createdDate}</td>
+          <td><span class="status-pill ${block.status === 'Active' ? 'status-active' : 'status-inactive'}">${block.status}</span></td>
+          <td class="action-btns">
+            <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-type="block" data-id="${block.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-danger delete-btn" data-type="block" data-id="${block.id}"><i class="bi bi-trash"></i></button>
+          </td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render floor table
+        function renderFloorTable(data) {
+            const tbody = document.querySelector('#floors tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((floor, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${(currentPage - 1) * rowsPerPage + index + 1}</td>
+          <td>${floor.name}</td>
+          <td>${floor.floorId}</td>
+          <td>${floor.blockName}</td>
+          <td>${floor.createdDate}</td>
+          <td><span class="status-pill ${floor.status === 'Active' ? 'status-active' : 'status-inactive'}">${floor.status}</span></td>
+          <td class="action-btns">
+            <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-type="floor" data-id="${floor.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-danger delete-btn" data-type="floor" data-id="${floor.id}"><i class="bi bi-trash"></i></button>
+          </td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render ward table
+        function renderWardTable(data) {
+            const tbody = document.querySelector('#wards tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((ward, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${(currentPage - 1) * rowsPerPage + index + 1}</td>
+          <td>${ward.name}</td>
+          <td>${ward.wardId}</td>
+          <td>${ward.block}</td>
+          <td>${ward.floor}</td>
+          <td>${ward.createdDate}</td>
+          <td><span class="status-pill ${ward.status === 'Active' ? 'status-active' : 'status-inactive'}">${ward.status}</span></td>
+          <td class="action-btns">
+            <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-type="ward" data-id="${ward.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-danger delete-btn" data-type="ward" data-id="${ward.id}"><i class="bi bi-trash"></i></button>
+          </td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render bed table
+        function renderBedTable(data) {
+            const tbody = document.querySelector('#beds tbody');
+            tbody.innerHTML = '';
+
+            data.forEach((bed, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+          <td>${(currentPage - 1) * rowsPerPage + index + 1}</td>
+          <td>${bed.name}</td>
+          <td>${bed.bedSeries}</td>
+          <td>${bed.ward}</td>
+          <td>${bed.roomNo}</td>
+          <td>${bed.type}</td>
+          <td>${bed.noOfBeds}</td>
+          <td>${bed.createdDate}</td>
+          <td><span class="status-pill ${bed.status === 'Active' ? 'status-active' : 'status-inactive'}">${bed.status}</span></td>
+          <td class="action-btns">
+            <button class="btn btn-sm btn-outline-primary me-1 edit-btn" data-type="bed" data-id="${bed.id}"><i class="bi bi-pencil"></i></button>
+            <button class="btn btn-sm btn-outline-danger delete-btn" data-type="bed" data-id="${bed.id}"><i class="bi bi-trash"></i></button>
+          </td>
+        `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Setup pagination
+        function setupPagination(tableType, data) {
+            const pageCount = Math.ceil(data.length / rowsPerPage);
+            paginationContainer.innerHTML = '';
+
+            if (pageCount <= 1) {
+                paginationContainer.innerHTML = `
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item disabled">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        `;
+                return;
+            }
+
+            // Previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" tabindex="-1">Previous</a>`;
+            prevLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            });
+            paginationContainer.appendChild(prevLi);
+
+            // Page numbers
+            for (let i = 1; i <= pageCount; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${currentPage === i ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    updateTable();
+                });
+                paginationContainer.appendChild(pageLi);
+            }
+
+            // Next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === pageCount ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#">Next</a>`;
+            nextLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage < pageCount) {
+                    currentPage++;
+                    updateTable();
+                }
+            });
+            paginationContainer.appendChild(nextLi);
+
+            // Update page info
+            const startItem = (currentPage - 1) * rowsPerPage + 1;
+            const endItem = Math.min(currentPage * rowsPerPage, data.length);
+            pageInfo.textContent = `Showing ${startItem} to ${endItem} of ${data.length} entries`;
+        }
+
+        // Update table based on current page and filters
+        function updateTable() {
+            showLoading();
+
+            // Simulate loading delay
+            setTimeout(() => {
+                if (currentTable === 'blocks') {
+                    renderBlockTable(getPaginatedData('blocks'));
+                    setupPagination('blocks', filteredData.blocks);
+                } else if (currentTable === 'floors') {
+                    renderFloorTable(getPaginatedData('floors'));
+                    setupPagination('floors', filteredData.floors);
+                } else if (currentTable === 'wards') {
+                    renderWardTable(getPaginatedData('wards'));
+                    setupPagination('wards', filteredData.wards);
+                } else if (currentTable === 'beds') {
+                    renderBedTable(getPaginatedData('beds'));
+                    setupPagination('beds', filteredData.beds);
+                }
+
+                hideLoading();
+            }, 300);
+        }
+
+        // Show loading overlay
+        function showLoading() {
+            loadingOverlay.classList.remove('d-none');
+        }
+
+        // Hide loading overlay
+        function hideLoading() {
+            loadingOverlay.classList.add('d-none');
+        }
+
+        // Filter data based on search term
+        function filterData(tableType, searchTerm) {
+            if (!searchTerm) {
+                if (tableType === 'blocks') filteredData.blocks = [...blockData];
+                else if (tableType === 'floors') filteredData.floors = [...floorData];
+                else if (tableType === 'wards') filteredData.wards = [...wardData];
+                else if (tableType === 'beds') filteredData.beds = [...bedData];
+                return;
+            }
+
+            if (tableType === 'blocks') {
+                filteredData.blocks = blockData.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    item.blockId.toLowerCase().includes(searchTerm) ||
+                    item.createdDate.toLowerCase().includes(searchTerm) ||
+                    item.status.toLowerCase().includes(searchTerm)
+                );
+            } else if (tableType === 'floors') {
+                filteredData.floors = floorData.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    item.floorId.toLowerCase().includes(searchTerm) ||
+                    item.blockName.toLowerCase().includes(searchTerm) ||
+                    item.createdDate.toLowerCase().includes(searchTerm) ||
+                    item.status.toLowerCase().includes(searchTerm)
+                );
+            } else if (tableType === 'wards') {
+                filteredData.wards = wardData.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    item.wardId.toLowerCase().includes(searchTerm) ||
+                    item.block.toLowerCase().includes(searchTerm) ||
+                    item.floor.toLowerCase().includes(searchTerm) ||
+                    item.createdDate.toLowerCase().includes(searchTerm) ||
+                    item.status.toLowerCase().includes(searchTerm)
+                );
+            } else if (tableType === 'beds') {
+                filteredData.beds = bedData.filter(item =>
+                    item.name.toLowerCase().includes(searchTerm) ||
+                    item.bedSeries.toLowerCase().includes(searchTerm) ||
+                    item.ward.toLowerCase().includes(searchTerm) ||
+                    item.roomNo.toLowerCase().includes(searchTerm) ||
+                    item.type.toLowerCase().includes(searchTerm) ||
+                    item.noOfBeds.toString().includes(searchTerm) ||
+                    item.createdDate.toLowerCase().includes(searchTerm) ||
+                    item.status.toLowerCase().includes(searchTerm)
+                );
+            }
+        }
+
+        // Open edit modal for a specific item
+        function openEditModal(type, id) {
+            let item;
+
+            if (type === 'block') {
+                item = blockData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('editBlockName').value = item.name;
+                    document.getElementById('editBlockId').value = item.blockId;
+                    document.getElementById('editBlockStatus').value = item.status;
+                    document.getElementById('editBlockDescription').value = item.description || '';
+                    document.getElementById('editBlockIdValue').value = item.id;
+
+                    // Show the modal
+                    const modal = new bootstrap.Modal(document.getElementById('editBlockModal'));
+                    modal.show();
+                }
+            } else if (type === 'floor') {
+                item = floorData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('editFloorName').value = item.name;
+                    document.getElementById('editFloorId').value = item.floorId;
+                    document.getElementById('editFloorBlockName').value = item.blockName;
+                    document.getElementById('editFloorStatus').value = item.status;
+                    document.getElementById('editFloorDescription').value = item.description || '';
+                    document.getElementById('editFloorIdValue').value = item.id;
+
+                    const modal = new bootstrap.Modal(document.getElementById('editFloorModal'));
+                    modal.show();
+                }
+            } else if (type === 'ward') {
+                item = wardData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('editWardName').value = item.name;
+                    document.getElementById('editWardId').value = item.wardId;
+                    document.getElementById('editWardBlockName').value = item.block;
+                    document.getElementById('editWardFloorName').value = item.floor;
+                    document.getElementById('editWardType').value = item.type;
+                    document.getElementById('editWardCost').value = item.cost;
+                    document.getElementById('editWardStatus').value = item.status;
+                    document.getElementById('editWardDescription').value = item.description || '';
+                    document.getElementById('editWardIdValue').value = item.id;
+
+                    const modal = new bootstrap.Modal(document.getElementById('editWardModal'));
+                    modal.show();
+                }
+            } else if (type === 'bed') {
+                item = bedData.find(item => item.id === id);
+                if (item) {
+                    document.getElementById('editBedName').value = item.name;
+                    document.getElementById('editBedSeries').value = item.bedSeries;
+                    document.getElementById('editBedWardName').value = item.ward;
+                    document.getElementById('editBedRoomNo').value = item.roomNo;
+                    document.getElementById('editBedRoomTypeSelect').value = item.type;
+                    document.getElementById('editBedNoBeds').value = item.noOfBeds;
+                    document.getElementById('editBedStatus').value = item.status;
+                    document.getElementById('editBedDescription').value = item.description || '';
+                    document.getElementById('editBedIdValue').value = item.id;
+
+                    // Set the correct radio button based on type
+                    document.querySelectorAll('input[name="roomTypeRadio"]').forEach(radio => {
+                        radio.checked = (radio.value === item.type);
+                    });
+
+                    const modal = new bootstrap.Modal(document.getElementById('editBedModal'));
+                    modal.show();
+                }
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = tab.dataset.tab;
+                    currentTable = target;
+                    currentPage = 1;
+
+                    tables.forEach(table => {
+                        table.classList.toggle('d-none', table.id !== target);
+                    });
+
+                    if (target === 'blocks') {
+                        createBtn.setAttribute('data-bs-target', '#createBlockModal');
+                        createBtn.innerHTML = '<i class="bi bi-plus-square me-1"></i> Create Block';
+                        updateTable();
+                    } else if (target === 'floors') {
+                        createBtn.setAttribute('data-bs-target', '#createFloorModal');
+                        createBtn.innerHTML = '<i class="bi bi-plus-square me-1"></i> Create Floor';
+                        updateTable();
+                    } else if (target === 'wards') {
+                        createBtn.setAttribute('data-bs-target', '#createWardModal');
+                        createBtn.innerHTML = '<i class="bi bi-plus-square me-1"></i> Create Ward';
+                        updateTable();
+                    } else if (target === 'beds') {
+                        createBtn.setAttribute('data-bs-target', '#createBedModal');
+                        createBtn.innerHTML = '<i class="bi bi-plus-square me-1"></i> Create Bed';
+                        updateTable();
+                    }
+                });
+            });
+
+            // Dark mode toggle
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const icon = darkModeToggle.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('bi-moon');
+                    icon.classList.add('bi-sun');
+                } else {
+                    icon.classList.remove('bi-sun');
+                    icon.classList.add('bi-moon');
+                }
+            });
+
+            // Fullscreen toggle using the Fullscreen API
+            fullscreenToggle.addEventListener('click', toggleFullscreen);
+
+            // Listen for fullscreen change events to update icon
+            document.addEventListener('fullscreenchange', updateFullscreenIcon);
+            document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+            document.addEventListener('mozfullscreenchange', updateFullscreenIcon);
+            document.addEventListener('MSFullscreenChange', updateFullscreenIcon);
+
+            // Search functionality
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                filterData(currentTable, searchTerm);
+                currentPage = 1;
+                updateTable();
+            });
+
+            // Add bed row
+            addBedRowBtn.addEventListener('click', () => {
+                const firstRow = bedRowsContainer.querySelector('.bed-row');
+                const newRow = firstRow.cloneNode(true);
+
+                // Clear input values in the new row
+                newRow.querySelectorAll('input').forEach(input => input.value = '');
+                newRow.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+
+                bedRowsContainer.appendChild(newRow);
+            });
+
+            // Action buttons (edit and delete) using event delegation
+            document.addEventListener('click', function (e) {
+                // Edit button
+                if (e.target.closest('.edit-btn')) {
+                    const btn = e.target.closest('.edit-btn');
+                    const type = btn.dataset.type;
+                    const id = parseInt(btn.dataset.id);
+                    openEditModal(type, id);
+                }
+
+                // Delete button
+                if (e.target.closest('.delete-btn')) {
+                    const btn = e.target.closest('.delete-btn');
+                    const type = btn.dataset.type;
+                    const id = parseInt(btn.dataset.id);
+
+                    if (confirm(`Are you sure you want to delete this ${type}?`)) {
+                        if (type === 'block') {
+                            blockData = blockData.filter(item => item.id !== id);
+                            filteredData.blocks = [...blockData];
+                            renderBlockTable(getPaginatedData('blocks'));
+                            setupPagination('blocks', filteredData.blocks);
+                        } else if (type === 'floor') {
+                            floorData = floorData.filter(item => item.id !== id);
+                            filteredData.floors = [...floorData];
+                            renderFloorTable(getPaginatedData('floors'));
+                            setupPagination('floors', filteredData.floors);
+                        } else if (type === 'ward') {
+                            wardData = wardData.filter(item => item.id !== id);
+                            filteredData.wards = [...wardData];
+                            renderWardTable(getPaginatedData('wards'));
+                            setupPagination('wards', filteredData.wards);
+                        } else if (type === 'bed') {
+                            bedData = bedData.filter(item => item.id !== id);
+                            filteredData.beds = [...bedData];
+                            renderBedTable(getPaginatedData('beds'));
+                            setupPagination('beds', filteredData.beds);
+                        }
+                    }
+                }
+            });
+
+            // Form submissions for create forms
+            document.getElementById('BlockForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                // Add new block to data
+                const newBlock = {
+                    id: blockData.length + 1,
+                    name: formData.get('blockName'),
+                    blockId: formData.get('blockId'),
+                    createdDate: new Date().toISOString().split('T')[0],
+                    status: 'Active',
+                    description: formData.get('blockDescription') || ''
+                };
+
+                blockData.push(newBlock);
+                filteredData.blocks = [...blockData];
+                renderBlockTable(getPaginatedData('blocks'));
+                setupPagination('blocks', filteredData.blocks);
+
+                // Close modal and reset form
+                bootstrap.Modal.getInstance(document.getElementById('createBlockModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('FloorForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                // Add new floor to data
+                const newFloor = {
+                    id: floorData.length + 1,
+                    name: formData.get('floorName'),
+                    floorId: formData.get('floorId'),
+                    blockName: formData.get('blockName'),
+                    createdDate: new Date().toISOString().split('T')[0],
+                    status: 'Active',
+                    description: formData.get('floorDescription') || ''
+                };
+
+                floorData.push(newFloor);
+                filteredData.floors = [...floorData];
+                renderFloorTable(getPaginatedData('floors'));
+                setupPagination('floors', filteredData.floors);
+
+                // Close modal and reset form
+                bootstrap.Modal.getInstance(document.getElementById('createFloorModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('wardForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                // Add new ward to data
+                const newWard = {
+                    id: wardData.length + 1,
+                    name: formData.get('wardName'),
+                    wardId: formData.get('wardId'),
+                    block: formData.get('blockName'),
+                    floor: formData.get('floorName'),
+                    type: formData.get('wardType'),
+                    cost: parseFloat(formData.get('wardCost')),
+                    createdDate: new Date().toISOString().split('T')[0],
+                    status: 'Active',
+                    description: formData.get('wardDescription') || ''
+                };
+
+                wardData.push(newWard);
+                filteredData.wards = [...wardData];
+                renderWardTable(getPaginatedData('wards'));
+                setupPagination('wards', filteredData.wards);
+
+                // Close modal and reset form
+                bootstrap.Modal.getInstance(document.getElementById('createWardModal')).hide();
+                this.reset();
+            });
+
+            document.getElementById('bedForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+
+                // Add new bed to data (simplified for demo)
+                const newBed = {
+                    id: bedData.length + 1,
+                    name: formData.getAll('bedName[]')[0],
+                    bedSeries: formData.getAll('bedSeries[]')[0],
+                    ward: formData.get('wardName'),
+                    roomNo: formData.get('roomNo'),
+                    type: formData.get('roomTypeSelect'),
+                    noOfBeds: formData.getAll('noBeds[]')[0],
+                    createdDate: new Date().toISOString().split('T')[0],
+                    status: 'Active',
+                    description: formData.get('bedDescription') || ''
+                };
+
+                bedData.push(newBed);
+                filteredData.beds = [...bedData];
+                renderBedTable(getPaginatedData('beds'));
+                setupPagination('beds', filteredData.beds);
+
+                // Close modal and reset form
+                bootstrap.Modal.getInstance(document.getElementById('createBedModal')).hide();
+                this.reset();
+
+                // Reset bed rows to just one
+                const bedRows = bedRowsContainer.querySelectorAll('.bed-row');
+                for (let i = 1; i < bedRows.length; i++) {
+                    bedRows[i].remove();
+                }
+            });
+
+            // Form submissions for edit forms
+            document.getElementById('editBlockForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const id = parseInt(document.getElementById('editBlockIdValue').value);
+
+                // Find and update the block
+                const index = blockData.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    blockData[index] = {
+                        ...blockData[index],
+                        name: formData.get('blockName'),
+                        blockId: formData.get('blockId'),
+                        status: formData.get('blockStatus'),
+                        description: formData.get('blockDescription') || ''
+                    };
+
+                    filteredData.blocks = [...blockData];
+                    renderBlockTable(getPaginatedData('blocks'));
+                    setupPagination('blocks', filteredData.blocks);
+
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('editBlockModal')).hide();
+                }
+            });
+
+            document.getElementById('editFloorForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const id = parseInt(document.getElementById('editFloorIdValue').value);
+
+                // Find and update the floor
+                const index = floorData.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    floorData[index] = {
+                        ...floorData[index],
+                        name: formData.get('floorName'),
+                        floorId: formData.get('floorId'),
+                        blockName: formData.get('blockName'),
+                        status: formData.get('floorStatus'),
+                        description: formData.get('floorDescription') || ''
+                    };
+
+                    filteredData.floors = [...floorData];
+                    renderFloorTable(getPaginatedData('floors'));
+                    setupPagination('floors', filteredData.floors);
+
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('editFloorModal')).hide();
+                }
+            });
+
+            document.getElementById('editWardForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const id = parseInt(document.getElementById('editWardIdValue').value);
+
+                // Find and update the ward
+                const index = wardData.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    wardData[index] = {
+                        ...wardData[index],
+                        name: formData.get('wardName'),
+                        wardId: formData.get('wardId'),
+                        block: formData.get('blockName'),
+                        floor: formData.get('floorName'),
+                        type: formData.get('wardType'),
+                        cost: parseFloat(formData.get('wardCost')),
+                        status: formData.get('wardStatus'),
+                        description: formData.get('wardDescription') || ''
+                    };
+
+                    filteredData.wards = [...wardData];
+                    renderWardTable(getPaginatedData('wards'));
+                    setupPagination('wards', filteredData.wards);
+
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('editWardModal')).hide();
+                }
+            });
+
+            document.getElementById('editBedForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const id = parseInt(document.getElementById('editBedIdValue').value);
+
+                // Find and update the bed
+                const index = bedData.findIndex(item => item.id === id);
+                if (index !== -1) {
+                    bedData[index] = {
+                        ...bedData[index],
+                        name: formData.get('bedName[]'),
+                        bedSeries: formData.get('bedSeries[]'),
+                        ward: formData.get('wardName'),
+                        roomNo: formData.get('roomNo'),
+                        type: formData.get('roomTypeSelect'),
+                        noOfBeds: formData.get('noBeds[]'),
+                        status: formData.get('bedStatus'),
+                        description: formData.get('bedDescription') || ''
+                    };
+
+                    filteredData.beds = [...bedData];
+                    renderBedTable(getPaginatedData('beds'));
+                    setupPagination('beds', filteredData.beds);
+
+                    // Close modal
+                    bootstrap.Modal.getInstance(document.getElementById('editBedModal')).hide();
+                }
+            });
+        }
+
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) {
+                    document.documentElement.msRequestFullscreen();
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        // Update fullscreen icon based on fullscreen state
+        function updateFullscreenIcon() {
+            const icon = fullscreenToggle.querySelector('i');
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                icon.classList.remove('bi-arrows-fullscreen');
+                icon.classList.add('bi-fullscreen-exit');
+            } else {
+                icon.classList.remove('bi-fullscreen-exit');
+                icon.classList.add('bi-arrows-fullscreen');
+            }
+        }
+    </script>
+</body>
+
+</html>
